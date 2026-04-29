@@ -1,4 +1,7 @@
 package org.checkit.user.infraestructure;
 
-public interface UserRepository {
+import org.checkit.user.domain.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, Long> {
 }

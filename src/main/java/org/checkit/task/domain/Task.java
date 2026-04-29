@@ -1,4 +1,5 @@
-package org.checkit.pet.domain;
+package org.checkit.task.domain;
+
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -6,18 +7,25 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.checkit.user.domain.User;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-public class Pet {
+public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String title;
+    private String description;
+    private LocalDate deadline;
+    @Enumerated(EnumType.STRING)
+    private State state=State.PENDIENTE;
 
-    @OneToOne
-    @JoinColumn(name = "user_id",nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
 }
