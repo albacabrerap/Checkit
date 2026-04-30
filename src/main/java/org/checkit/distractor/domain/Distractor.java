@@ -1,4 +1,4 @@
-package org.checkit.pet.domain;
+package org.checkit.distractor.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,17 +7,19 @@ import lombok.Setter;
 import org.checkit.user.domain.User;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
-public class Pet {
+public class Distractor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String name;
+    private String url;
 
-    @OneToOne
-    @JoinColumn(name = "user_id",nullable = false)
+    @ManyToOne
+    @JoinColumn(name="user_id",nullable = false)
     private User user;
 }
