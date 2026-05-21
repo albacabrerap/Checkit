@@ -1,4 +1,4 @@
-package org.checkit.studysession.infraestructure;
+package org.checkit.studysession.infrastructure;
 
 import org.checkit.studysession.domain.Studysession;
 import org.springframework.data.jpa.repository.JpaRepository;

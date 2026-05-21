@@ -1,4 +1,4 @@
-package org.checkit.achivement.infraestructure;
+package org.checkit.achivement.infrastructure;
 
 
 import org.checkit.achivement.domain.Achivement;

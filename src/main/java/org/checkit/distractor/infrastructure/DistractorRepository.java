@@ -1,4 +1,4 @@
-package org.checkit.distractor.infraestructure;
+package org.checkit.distractor.infrastructure;
 
 import org.checkit.distractor.domain.Distractor;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -46,4 +46,6 @@ public class User {
     @ManyToMany
     @JoinTable(name = "user_achivements",  joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "achivement_id"))
     private List<Achivement> achivements;
+
+    //cancione o playlists
 }
