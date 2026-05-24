@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
         body.put("message", ex.getMessage());
         body.put("status", HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-    }
+    } //tdos los errores 400
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGeneralException(Exception ex) {
@@ -28,5 +28,5 @@ public class GlobalExceptionHandler {
         body.put("message", "An unexpected error occurred internal to the system.");
         body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    }//todos los errores 500
 }

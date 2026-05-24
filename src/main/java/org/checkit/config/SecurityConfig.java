@@ -21,7 +21,8 @@ public class SecurityConfig {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .defaultSuccessUrl("/api/user/me", true)
-                );
+                )
+                .oauth2Client(oauth2Client -> {});
 
         return http.build();
     }

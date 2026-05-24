@@ -7,14 +7,21 @@ import org.checkit.user.dto.MobileWidgetResponseDto;
 import org.checkit.task.domain.Task;
 import org.checkit.task.domain.State;
 import org.checkit.user.infrastructure.UserRepository;
+import org.checkit.user.infrastructure.FriendsRepository;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final FriendsRepository friendshipRepository; // Added repository
 
     @Transactional
     public User updateUserPreferences(User user, UserConfigUpdateDto dto) {
@@ -42,5 +49,31 @@ public class UserService {
         }
 
         return response;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> getFriendIds(Long userId) {
+        List<Friendship> friendships = friendshipRepository.findByUserIdAndAcceptedTrue(userId);
+        return friendships.stream()
+                .map(friendship -> friendship.getFriend().getId())
+                .toList();
+    }
+
+    @Transactional
+    public User findOrCreateFromGoogle(OAuth2AuthenticationToken authToken) {
+        OAuth2User oauthUser = authToken.getPrincipal();
+
+        String email = Objects.requireNonNull(oauthUser).getAttribute("email");
+        String name = oauthUser.getAttribute("name");
+        String googleId = oauthUser.getAttribute("sub"); // Google's unique user ID
+
+        return userRepository.findByGoogleId(googleId)
+                .orElseGet(() -> {
+                    User newUser = new User();
+                    newUser.setEmail(email);
+                    newUser.setName(name);
+                    newUser.setGoogleId(googleId);
+                    return userRepository.save(newUser);
+                });
     }
 }

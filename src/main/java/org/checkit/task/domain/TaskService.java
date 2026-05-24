@@ -26,34 +26,24 @@ public class TaskService {
         Task task = modelMapper.map(dto, Task.class);
         task.setUser(user);
         task.setState(State.PENDIENTE);
-
-        Task savedTask = (Task) taskRepository.save(task);
-        eventPublisher.publishEvent(new TaskCreatedEvent(savedTask, user.getEmail()));
-
-        return savedTask;
+        return taskRepository.save(task);
     }
 
     @Transactional
-    public Task completeTask(Long taskId, User user) throws Throwable {
-        Task task = (Task) taskRepository.findById(taskId)
-                .orElseThrow(() -> new BusinessException("Task not found"));
-
-        if (!task.getUser().getId().equals(user.getId())) {
-            throw new BusinessException("Unauthorized task modification attempt");
-        }
+    public Task completeTask(Long taskId, User user) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new BusinessException("No se encontro la tarea"));
 
         task.setState(State.COMPLETADA);
-        Task updatedTask = (Task) taskRepository.save(task);
-
-        eventPublisher.publishEvent(new TaskCompletedEvent(updatedTask));
-
-        return updatedTask;
+        Task updated = taskRepository.save(task);
+        eventPublisher.publishEvent(new TaskCompletedEvent(updated));
+        return updated;
     }
 
     public Task getRandomTaskFromWheel(User user) {
         List<Task> pendingTasks = taskRepository.findByUserAndState(user, State.PENDIENTE);
         if (pendingTasks.isEmpty()) {
-            throw new BusinessException("No pending tasks available for the lucky wheel!");
+            throw new BusinessException("Sin tareas pendientes para usar la rueda!");
         }
         int randomIndex = (int) (Math.random() * pendingTasks.size());
         return pendingTasks.get(randomIndex);

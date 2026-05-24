@@ -13,6 +13,7 @@ import org.checkit.task.domain.Task;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,14 +22,28 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    private String googleId;
+
     @Column(unique = true, nullable = false)
     private String username;
+
+    @Column(nullable = false)
+    private String name;
+
 
     @Column(unique = true, nullable = false)
     private String email;
 
     private Integer tasksCompleted;
     private Integer sessionsCompleted;
+
+    //music
+    @Column(name = "music_platform")
+    private String musicPlatform = "SPOTIFY"; //spotify por default
+
+    @Column(name = "custom_playlist_url")
+    private String customPlaylistUrl;
 
     @OneToOne
     @JoinColumn(name = "pet_id")
@@ -44,8 +59,10 @@ public class User {
     private List<Task> tasks;
 
     @ManyToMany
-    @JoinTable(name = "user_achivements",  joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "achivement_id"))
+    @JoinTable(
+            name = "user_achivements",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "achivement_id")
+    )
     private List<Achivement> achivements;
-
-    //cancione o playlists
 }
